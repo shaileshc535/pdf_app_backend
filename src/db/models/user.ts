@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import mongoose, { Schema, model, PopulatedDoc } from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 

@@ -1,6 +1,6 @@
 import PdfSchema from "../../db/models/pdf.model";
-import { Response, NextFunction } from "express";
-import S3 from "../../services/upload";
+import { Response } from "express";
+// import S3 from "../../services/upload";
 import StatusCodes from "http-status-codes";
 
 export interface IPdf {
@@ -16,7 +16,7 @@ export interface IPdf {
   updated_at?: Date;
 }
 
-const AddNewPdf = async (req, res: Response, next: NextFunction) => {
+const AddNewPdf = async (req, res: Response) => {
   try {
     const user = JSON.parse(JSON.stringify(req.user));
 
@@ -78,6 +78,8 @@ const UpdatePdfFile = async (req, res: Response) => {
       isdeleted: false,
     }).populate("ownerId");
 
+    const file = JSON.parse(JSON.stringify(fileData));
+
     if (!fileData) {
       return res.status(StatusCodes.NOT_FOUND).json({
         type: "error",
@@ -90,7 +92,7 @@ const UpdatePdfFile = async (req, res: Response) => {
       return res.status(StatusCodes.NOT_FOUND).json({
         type: "error",
         status: false,
-        message: `${fileData.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${fileData.ownerId.fullname}`,
+        message: `${file.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${file.ownerId.fullname}`,
         editable: fileData.is_editable,
       });
     }
@@ -276,11 +278,13 @@ const CheckPdfFileIsEditable = async (req, res: Response) => {
       _id: fileId,
     }).populate("ownerId");
 
+    const file = JSON.parse(JSON.stringify(result));
+
     if (result.is_editable !== true) {
       return res.status(StatusCodes.CREATED).json({
         status: true,
         type: "success",
-        message: `${result.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${result.ownerId.fullname}`,
+        message: `${file.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${file.ownerId.fullname}`,
         editable: result.is_editable,
         // data: result,
       });
