@@ -12,6 +12,7 @@ export interface IPdf {
   isupdated: boolean;
   deleted_at: Date;
   updated_at: Date;
+  fileConsumers: Array<string>;
 }
 
 const pdfSchema = new Schema<IPdf>(
@@ -26,6 +27,13 @@ const pdfSchema = new Schema<IPdf>(
     isdeleted: { type: Boolean, default: false },
     deleted_at: { type: Date },
     updated_at: { type: Date },
+    fileConsumers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+        default: null,
+      },
+    ],
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import mongoose from "mongoose";
+import mongoose, { Schema, model, PopulatedDoc } from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
@@ -76,8 +76,6 @@ const userSchema = new mongoose.Schema<IUser>(
     timestamps: true,
   }
 );
-
-// add payment method virtual
 
 userSchema
   .virtual("name")
