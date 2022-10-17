@@ -1,7 +1,7 @@
 ## Run Project During Development
 
 ```sh
-cd telemedic-backend
+cd server
 npm install
 npm run dev
 ```
@@ -9,7 +9,7 @@ npm run dev
 ## Test Project before Pushing to Master
 
 ```sh
-cd telemedic-backend
+cd server
 npm install
 npm run build
 npm run start
