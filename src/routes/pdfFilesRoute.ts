@@ -46,5 +46,10 @@ router.put("/update-file", auth, upload, controller.UpdatePdfFile);
 router.put("/delete-file/:fileId", auth, controller.DeletePdfFile);
 router.post("/list-files", auth, controller.ListPdfFiles);
 router.get("/get-file/:fileId", auth, controller.GetPdfFileById);
+router.get(
+  "/file-editable-check/:fileId",
+  auth,
+  controller.CheckPdfFileIsEditable
+);
 
 export default router;

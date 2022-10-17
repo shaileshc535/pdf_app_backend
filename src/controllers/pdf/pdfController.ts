@@ -4,11 +4,16 @@ import S3 from "../../services/upload";
 import StatusCodes from "http-status-codes";
 
 export interface IPdf {
-  userId: string;
+  ownerId: string;
   filename: string;
   filetype?: string;
   filesize?: string;
+  docname?: string;
   isdeleted: boolean;
+  is_editable: boolean;
+  isupdated: boolean;
+  deleted_at?: Date;
+  updated_at?: Date;
 }
 
 const AddNewPdf = async (req, res: Response, next: NextFunction) => {
@@ -31,7 +36,7 @@ const AddNewPdf = async (req, res: Response, next: NextFunction) => {
     // console.log("image_uri", image_uri);
 
     const newFile = new PdfSchema({
-      userId: user._id,
+      ownerId: user._id,
       docname: req.body.docname,
       filename: req.file.filename,
       filetype: req.file.mimetype,
@@ -62,11 +67,15 @@ const UpdatePdfFile = async (req, res: Response) => {
         message: "Please upload a file First",
       });
     }
+
     const user = JSON.parse(JSON.stringify(req.user));
 
     const { fileId } = req.body;
 
-    const fileData = await PdfSchema.findOne({ _id: fileId, userId: user._id });
+    const fileData = await PdfSchema.findOne({
+      _id: fileId,
+      ownerId: user._id,
+    }).populate("ownerId");
 
     if (!fileData) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -76,11 +85,23 @@ const UpdatePdfFile = async (req, res: Response) => {
       });
     }
 
+    if (fileData.is_editable !== true) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        type: "error",
+        status: false,
+        message: `${fileData.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${fileData.ownerId.fullname}`,
+        editable: fileData.is_editable,
+      });
+    }
+
     const requestData = {
       docname: req.body.docname,
       filename: req.file.filename,
       filetype: req.file.mimetype,
       filesize: req.file.size,
+      is_editable: false,
+      isupdated: true,
+      updated_at: Date.now(),
     };
 
     await PdfSchema.findByIdAndUpdate(
@@ -92,7 +113,7 @@ const UpdatePdfFile = async (req, res: Response) => {
 
     const updatedData = await PdfSchema.findOne({
       _id: fileId,
-      userId: user._id,
+      ownerId: user._id,
       isdeleted: false,
     });
 
@@ -115,7 +136,23 @@ const DeletePdfFile = async (req, res: Response) => {
   try {
     const id = req.params.fileId;
 
-    const fileData = await PdfSchema.findOne({ _id: id, isdeleted: false });
+    const user = JSON.parse(JSON.stringify(req.user));
+
+    const fileData = await PdfSchema.findOne({
+      _id: id,
+      isdeleted: false,
+    }).populate("ownerId");
+
+    const file = JSON.parse(JSON.stringify(fileData));
+
+    if (file.ownerId._id !== user._id) {
+      console.log("false");
+      return res.status(400).json({
+        type: "error",
+        status: false,
+        message: `you don’t have permission to delete this file. Please contact ${file.ownerId.fullname} for permission`,
+      });
+    }
 
     if (!fileData) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -127,6 +164,7 @@ const DeletePdfFile = async (req, res: Response) => {
 
     const requestData = {
       isdeleted: true,
+      deleted_at: Date.now(),
     };
 
     await PdfSchema.findByIdAndUpdate(
@@ -157,7 +195,7 @@ const ListPdfFiles = async (req, res: Response) => {
     let { page, limit, sort, cond } = req.body;
 
     if (user) {
-      cond = { userId: user._id, ...cond };
+      cond = { ownerId: user._id, ...cond };
     }
 
     if (!page || page < 1) {
@@ -176,7 +214,7 @@ const ListPdfFiles = async (req, res: Response) => {
     limit = parseInt(limit);
 
     const result = await PdfSchema.find(cond)
-      .populate("userId")
+      .populate("ownerId")
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit);
@@ -210,8 +248,8 @@ const GetPdfFileById = async (req, res: Response) => {
 
     const result = await PdfSchema.findById({
       _id: fileId,
-      userId: user._id,
-    }).populate("userId");
+      ownerId: user._id,
+    }).populate("ownerId");
 
     return res.status(StatusCodes.CREATED).json({
       status: true,
@@ -228,10 +266,44 @@ const GetPdfFileById = async (req, res: Response) => {
   }
 };
 
+const CheckPdfFileIsEditable = async (req, res: Response) => {
+  try {
+    const { fileId } = req.params;
+
+    const result = await PdfSchema.findById({
+      _id: fileId,
+    }).populate("ownerId");
+
+    if (result.is_editable !== true) {
+      return res.status(StatusCodes.CREATED).json({
+        status: true,
+        type: "success",
+        message: `${result.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${result.ownerId.fullname}`,
+        editable: result.is_editable,
+        // data: result,
+      });
+    }
+    return res.status(StatusCodes.CREATED).json({
+      status: true,
+      type: "success",
+      message: "File is Editable",
+      editable: result.is_editable,
+      // data: result,
+    });
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      type: "error",
+      status: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   AddNewPdf,
   UpdatePdfFile,
   DeletePdfFile,
   ListPdfFiles,
   GetPdfFileById,
+  CheckPdfFileIsEditable,
 };
