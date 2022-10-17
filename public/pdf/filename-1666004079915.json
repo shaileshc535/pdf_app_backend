@@ -1,0 +1,691 @@
+{
+	"info": {
+		"_postman_id": "c0338cab-4271-449b-8ba2-0ff22e7f124c",
+		"name": "PDF_APP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13217698"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\":\"admin\",\r\n    \"lastname\":\"test\",\r\n    \"email\":\"admin2@gmail.com\",\r\n    \"phone\":\"1234567893\",\r\n    \"password\":\"Admin@123\",\r\n    \"confirmPassword\":\"Admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin2@gmail.com\",\r\n    \"password\":\"Admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"p@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/user/forgotPass",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"user",
+								"forgotPass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"\",\r\n    \"tmp_password\":\"\",\r\n    \"new_password\":\"\",\r\n    \"confirm_password\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/user/forgot-reset-password",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"user",
+								"forgot-reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjgzNjQ2MGE5MWE2ZmE3YTljYWFmMTUiLCJpYXQiOjE2NTI3OTQ5ODYsImV4cCI6MTY1Mjg4MTM4Nn0.-QlODCxb0sxX6zJ5la51T0Do1KRSKVhWQEO1IPxUmL4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\":\"aUeU64Bn@\",\r\n    \"newPassword\":\"Shailesh@535\",\r\n    \"confirmNewPassword\":\"Shailesh@535\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/user/password-change",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"user",
+								"password-change"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PdfFiles",
+			"item": [
+				{
+					"name": "addFile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "filename",
+									"type": "file",
+									"src": "/C:/Users/Shailesh/Downloads/sample.pdf"
+								},
+								{
+									"key": "docname",
+									"value": "pdf",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/add-file",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"add-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateFile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzQ5Mjc2ZWUxNGVkZGRiZjRjYWYxMDAiLCJpYXQiOjE2NjU5ODUwODMsImV4cCI6MTY2NjA3MTQ4M30.AxY_2AeNkurrdTpLk3zBTYWrxetgkZo9MgwIcni4K6E",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "filename",
+									"type": "file",
+									"src": "/C:/Users/Shailesh/Downloads/sample.pdf"
+								},
+								{
+									"key": "docname",
+									"value": "new pdf",
+									"type": "text"
+								},
+								{
+									"key": "fileId",
+									"value": "6349633f81c0567a061a4e0d",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/update-file",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"update-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteFile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzQ5Mjc2ZWUxNGVkZGRiZjRjYWYxMDAiLCJpYXQiOjE2NjU3NDkxNjUsImV4cCI6MTY2NTgzNTU2NX0.L2sewq7cDVRb9BjblDQNNmhjE2yAd7NMg-_Vlf8e56s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/delete-file/634959d4826704dc2eda0bbc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"delete-file",
+								"634959d4826704dc2eda0bbc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFilesList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzQ5Mjc2ZWUxNGVkZGRiZjRjYWYxMDAiLCJpYXQiOjE2NjU3NDkxNjUsImV4cCI6MTY2NTgzNTU2NX0.L2sewq7cDVRb9BjblDQNNmhjE2yAd7NMg-_Vlf8e56s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page\":\"\", \r\n    \"limit\":\"\", \r\n    \"sort\":\"\", \r\n    \"cond\":{\r\n\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/list-files",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"list-files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFilebyId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzQ5Mjc2ZWUxNGVkZGRiZjRjYWYxMDAiLCJpYXQiOjE2NjU3NDkxNjUsImV4cCI6MTY2NTgzNTU2NX0.L2sewq7cDVRb9BjblDQNNmhjE2yAd7NMg-_Vlf8e56s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/get-file/634959d4826704dc2eda0bbc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"get-file",
+								"634959d4826704dc2eda0bbc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fileEditableCheck",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzQ5Mjc2ZWUxNGVkZGRiZjRjYWYxMDAiLCJpYXQiOjE2NjU5ODUwODMsImV4cCI6MTY2NjA3MTQ4M30.AxY_2AeNkurrdTpLk3zBTYWrxetgkZo9MgwIcni4K6E",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/file/file-editable-check/634959d4826704dc2eda0bbc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"file",
+								"file-editable-check",
+								"634959d4826704dc2eda0bbc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ShareFiles",
+			"item": [
+				{
+					"name": "SendFiles",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"634ced9df94c810853d30b79\",\r\n    \"fileId\":\"634d0750af60b2a3178bbe77\"\r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/share-file",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"share-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "receiveFilesList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page\":\"\", \r\n    \"limit\":\"\", \r\n    \"sort\":\"\", \r\n    \"cond\":{\r\n\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/receive-files-list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"receive-files-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sendFilesList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page\":\"\", \r\n    \"limit\":\"\", \r\n    \"sort\":\"\", \r\n    \"cond\":{\r\n\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/send-files-list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"send-files-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFileBy FileID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page\":\"\", \r\n    \"limit\":\"\", \r\n    \"sort\":\"\", \r\n    \"file\":\"634d0750af60b2a3178bbe77\",\r\n    \"cond\":{\r\n\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/get-file-list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"get-file-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "grandAccess",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/grand-access/634d100d1e26993c05cf4e2f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"grand-access",
+								"634d100d1e26993c05cf4e2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "revokeAccess",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/revoke-access/634d100d1e26993c05cf4e2f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"revoke-access",
+								"634d100d1e26993c05cf4e2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "receivedFileById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/received-file/634d100d1e26993c05cf4e2f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"received-file",
+								"634d100d1e26993c05cf4e2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sendFileById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzRkMDY0N2IyZWQ3MzUzYTBiMDQ1ZWEiLCJpYXQiOjE2NjU5OTIyNjMsImV4cCI6MTY2NjA3ODY2M30.fdfUAs7ngKsZf0NQEg4ZvjO9KMaTjYFLDDbV5wkNXDQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/files/send-file/634d100d1e26993c05cf4e2f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"files",
+								"send-file",
+								"634d100d1e26993c05cf4e2f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

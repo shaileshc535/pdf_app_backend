@@ -75,6 +75,7 @@ const UpdatePdfFile = async (req, res: Response) => {
     const fileData = await PdfSchema.findOne({
       _id: fileId,
       ownerId: user._id,
+      isdeleted: false,
     }).populate("ownerId");
 
     if (!fileData) {
@@ -195,7 +196,7 @@ const ListPdfFiles = async (req, res: Response) => {
     let { page, limit, sort, cond } = req.body;
 
     if (user) {
-      cond = { ownerId: user._id, ...cond };
+      cond = { ownerId: user._id, isdeleted: false, ...cond };
     }
 
     if (!page || page < 1) {
@@ -246,9 +247,10 @@ const GetPdfFileById = async (req, res: Response) => {
     const { fileId } = req.params;
     const user = JSON.parse(JSON.stringify(req.user));
 
-    const result = await PdfSchema.findById({
+    const result = await PdfSchema.find({
       _id: fileId,
       ownerId: user._id,
+      isdeleted: false,
     }).populate("ownerId");
 
     return res.status(StatusCodes.CREATED).json({
