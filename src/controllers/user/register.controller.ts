@@ -4,8 +4,6 @@
 import jwt from "jsonwebtoken";
 import validator from "email-validator";
 import User from "../../db/models/user";
-import activityLog from "../../services/activityLog";
-import { ACTIVITY_LOG_TYPES } from "../../../constant";
 import sendEmail from "../../services/sendEmail";
 
 const register = async (req, res) => {
@@ -71,17 +69,6 @@ const register = async (req, res) => {
     // }
     const user = new User({ ...req.body });
     let data = await user.save();
-    // const tempArray = {};
-    // tempArray["oldData"] = null;
-    // tempArray["newData"] = data;
-
-    // const activityData = await activityLog.create(
-    //   data._id,
-    //   data.role_id,
-    //   ACTIVITY_LOG_TYPES.CREATED,
-    //   req,
-    //   tempArray
-    // );
 
     data = JSON.parse(JSON.stringify(data));
 
@@ -90,14 +77,6 @@ const register = async (req, res) => {
       "Congratulations Account Created Successfully",
       "Congratulations your account is created. Please add your professional info and wait for the admin approval."
     );
-
-    // Image Upload code start
-
-    // const upload_data = {
-    //     db_response: data,
-    //     file: req.files[0],
-    // };
-    // const image_uri = await S3.uploadFile(upload_data);
 
     const response = await User.findByIdAndUpdate(
       data._id,
