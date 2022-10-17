@@ -34,7 +34,6 @@
     "@types/date-fns": "^2.6.0",
     "@types/fs-extra": "^9.0.13",
     "aws-sdk": "^2.1120.0",
-    "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
@@ -59,7 +58,6 @@
     "nodemon": "^2.0.15",
     "socket.io": "^4.5.1",
     "ts-node": "^10.7.0",
-    "twilio": "^3.77.1",
     "validator": "^13.7.0"
   }
 }
