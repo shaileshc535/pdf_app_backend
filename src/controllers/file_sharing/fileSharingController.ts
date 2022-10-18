@@ -1,7 +1,6 @@
 import PdfSchema from "../../db/models/pdf.model";
 import SharedFileSchema from "../../db/models/sharedFile.model";
-import { Response, NextFunction } from "express";
-import S3 from "../../services/upload";
+import { Response } from "express";
 import StatusCodes from "http-status-codes";
 
 export interface ISHAREDFILE {
@@ -49,14 +48,14 @@ const ShareFile = async (req, res: Response) => {
 
         res.status(200).json({
           type: "success",
-          status: true,
+          status: 200,
           message: "File Send successfully",
           data: newSharedFile,
         });
       } else {
         res.status(400).json({
           type: "success",
-          status: true,
+          status: 400,
           message: "File receiver is required",
           data: "",
         });
@@ -64,7 +63,7 @@ const ShareFile = async (req, res: Response) => {
     } else {
       res.status(400).json({
         type: "success",
-        status: true,
+        status: 400,
         message: "File is required",
         data: "",
       });
@@ -72,7 +71,7 @@ const ShareFile = async (req, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -93,7 +92,7 @@ const GrandAccess = async (req, res: Response) => {
     if (file.senderId._id !== user._id) {
       return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: `you don’t have permission to change grand access to this file. Please contact ${file.senderId.fullname} for permission`,
       });
     }
@@ -116,16 +115,16 @@ const GrandAccess = async (req, res: Response) => {
       isdeleted: false,
     });
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File access changes to grand successfully",
       data: updatedData.access,
     });
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -146,7 +145,7 @@ const RevokeAccess = async (req, res: Response) => {
     if (file.senderId._id !== user._id) {
       return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: `you don’t have permission to change revoke access to this file. Please contact ${file.senderId.fullname} for permission`,
       });
     }
@@ -169,16 +168,16 @@ const RevokeAccess = async (req, res: Response) => {
       isdeleted: false,
     });
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File access changes to revoke successfully",
       data: updatedData.access,
     });
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -199,7 +198,7 @@ const DeleteSharedFile = async (req, res: Response) => {
     if (file.senderId._id !== user._id) {
       return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: `you don’t have permission to delete this file. Please contact ${file.senderId.fullname} for permission`,
       });
     }
@@ -218,14 +217,14 @@ const DeleteSharedFile = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Shared File deleted successfully",
       data: "",
     });
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -268,7 +267,7 @@ const ListSenderFile = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Shared File list fetched successfully",
       page: page,
       limit: limit,
@@ -279,7 +278,7 @@ const ListSenderFile = async (req, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -322,7 +321,7 @@ const ListReceivedFile = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Received File list fetched successfully",
       page: page,
       limit: limit,
@@ -333,7 +332,7 @@ const ListReceivedFile = async (req, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -356,14 +355,14 @@ const ReceivedFileById = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Received File details fetched successfully",
       data: result,
     });
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -386,14 +385,14 @@ const SendFileById = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Send File details fetched successfully",
       data: result,
     });
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -438,7 +437,7 @@ const getByFileId = async (req, res: Response) => {
 
     res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File list fetched successfully",
       page: page,
       limit: limit,
@@ -449,7 +448,7 @@ const getByFileId = async (req, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }

@@ -20,14 +20,18 @@ const forgotPassword = async (
     const schema = Joi.object({ email: Joi.string().email().required() });
     const { error } = schema.validate(req.body);
 
-    if (error) return res.status(404).send(error.details[0].message);
+    if (error) {
+      return res.status(404).send(error.details[0].message);
+    }
 
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      return res
-        .status(400)
-        .send({ message: "user with given email doesn't exist" });
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: "user with given email doesn't exist",
+      });
     }
 
     let token = await Token.findOne({ userId: user._id });
@@ -61,16 +65,16 @@ const forgotPassword = async (
       tempPass
     );
 
-    res.status(StatusCodes.OK).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Temp Password",
       Password_Reset_Link: tempPass,
     });
   } catch (err) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: "An Error Occured Please Try After Some Time!",
     });
   }
@@ -96,25 +100,37 @@ const resetPassword = async (
     if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findById(req.params.userId);
-    if (!user) return res.status(400).send("Invalid Link or expired");
+    if (!user)
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: "Invalid Link or expired",
+      });
 
     const token = await Token.findOne({
       userId: user._id,
       token: req.params.token,
     });
 
-    if (!token) return res.status(400).send("Invalid Link or expired");
+    if (!token)
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: "Invalid Link or expired",
+      });
 
     if (!pass_rgex.test(password)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message:
           "Password must have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
       });
     }
     if (password !== confirmPassword) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: "Password didn't Match",
       });
     }
@@ -123,15 +139,15 @@ const resetPassword = async (
     await user.save({ validateBeforeSave: false });
     await token.delete();
 
-    return res.status(StatusCodes.OK).json({
+    return res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Password Changed!",
     });
   } catch (err) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: "An Error Occured!",
     });
   }
@@ -152,24 +168,32 @@ const changePassword = async (req, res: Response, next: NextFunction) => {
     });
 
     const { error } = schema.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
 
     const passwordIsValid = bcrypt.compareSync(currentPassword, user.password);
 
     if (!passwordIsValid) {
-      return res.status(404).send({
+      return res.status(400).send({
+        type: "error",
+        status: 400,
         message: "Invalid Current Password!",
       });
     }
 
     if (!pass_rgex.test(newPassword)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message:
           "Password must have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
       });
     }
     if (newPassword !== confirmNewPassword) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message: "New Password and Confirm Password Is not same",
       });
     }
@@ -177,16 +201,16 @@ const changePassword = async (req, res: Response, next: NextFunction) => {
     user.password = newPassword;
     await user.save({ validateBeforeSave: false });
 
-    return res.status(StatusCodes.OK).json({
+    return res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Password changed successful",
       data: user,
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -206,26 +230,34 @@ const changeTempPassword = async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      return res
-        .status(400)
-        .send({ message: "user with given email doesn't exist" });
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: "user with given email doesn't exist",
+      });
     }
 
     const passwordIsValid = bcrypt.compareSync(tmp_password, user.password);
     if (!passwordIsValid) {
-      return res.status(404).send({
+      return res.status(400).send({
+        type: "error",
+        status: 400,
         message: "Invalid Current Password!",
       });
     }
 
     if (!pass_rgex.test(new_password)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message:
           "Password must have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
       });
     }
     if (new_password !== confirm_password) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message: "New Password and Confirm Password Is not same",
       });
     }
@@ -233,16 +265,16 @@ const changeTempPassword = async (req, res) => {
     user.password = new_password;
     await user.save({ validateBeforeSave: false });
 
-    return res.status(StatusCodes.OK).json({
+    return res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "Password changed successful",
       data: user,
     });
   } catch (err) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: err.message,
     });
   }

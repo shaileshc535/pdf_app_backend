@@ -1,6 +1,5 @@
 import PdfSchema from "../../db/models/pdf.model";
 import { Response } from "express";
-// import S3 from "../../services/upload";
 import StatusCodes from "http-status-codes";
 
 export interface IPdf {
@@ -26,15 +25,6 @@ const AddNewPdf = async (req, res: Response) => {
       });
     }
 
-    // const upload_data = {
-    //   db_response: user._id,
-    //   file: req.file,
-    // };
-
-    // const image_uri = await S3.uploadFile(upload_data);
-
-    // console.log("image_uri", image_uri);
-
     const newFile = new PdfSchema({
       ownerId: user._id,
       docname: req.body.docname,
@@ -45,16 +35,16 @@ const AddNewPdf = async (req, res: Response) => {
 
     await newFile.save();
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File Uploaded successfully",
       data: newFile,
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -63,7 +53,9 @@ const AddNewPdf = async (req, res: Response) => {
 const UpdatePdfFile = async (req, res: Response) => {
   try {
     if (!req.file) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return res.status(400).json({
+        type: "error",
+        status: 400,
         message: "Please upload a file First",
       });
     }
@@ -81,17 +73,17 @@ const UpdatePdfFile = async (req, res: Response) => {
     const file = JSON.parse(JSON.stringify(fileData));
 
     if (!fileData) {
-      return res.status(StatusCodes.NOT_FOUND).json({
+      return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: "File not found",
       });
     }
 
     if (fileData.is_editable !== true) {
-      return res.status(StatusCodes.NOT_FOUND).json({
+      return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: `${file.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${file.ownerId.fullname}`,
         editable: fileData.is_editable,
       });
@@ -120,16 +112,16 @@ const UpdatePdfFile = async (req, res: Response) => {
       isdeleted: false,
     });
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File Uploaded successfully",
       data: updatedData,
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -152,15 +144,15 @@ const DeletePdfFile = async (req, res: Response) => {
       console.log("false");
       return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: `you don’t have permission to delete this file. Please contact ${file.ownerId.fullname} for permission`,
       });
     }
 
     if (!fileData) {
-      return res.status(StatusCodes.NOT_FOUND).json({
+      return res.status(400).json({
         type: "error",
-        status: false,
+        status: 400,
         message: "File not found",
       });
     }
@@ -177,16 +169,16 @@ const DeletePdfFile = async (req, res: Response) => {
       requestData
     );
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       type: "success",
-      status: true,
+      status: 200,
       message: "File Deleted successfully",
       data: "",
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -225,8 +217,8 @@ const ListPdfFiles = async (req, res: Response) => {
     const result_count = await PdfSchema.find(cond).count();
     const totalPages = Math.ceil(result_count / limit);
 
-    return res.status(StatusCodes.CREATED).json({
-      status: true,
+    return res.status(200).json({
+      status: 200,
       type: "success",
       message: "Files Fetch Successfully",
       page: page,
@@ -236,9 +228,9 @@ const ListPdfFiles = async (req, res: Response) => {
       data: result,
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -255,16 +247,16 @@ const GetPdfFileById = async (req, res: Response) => {
       isdeleted: false,
     }).populate("ownerId");
 
-    return res.status(StatusCodes.CREATED).json({
-      status: true,
+    return res.status(200).json({
+      status: 200,
       type: "success",
       message: "File Fetched Successfully",
       data: result,
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
@@ -281,25 +273,25 @@ const CheckPdfFileIsEditable = async (req, res: Response) => {
     const file = JSON.parse(JSON.stringify(result));
 
     if (result.is_editable !== true) {
-      return res.status(StatusCodes.CREATED).json({
-        status: true,
-        type: "success",
+      return res.status(400).json({
+        status: 400,
+        type: "error",
         message: `${file.ownerId.fullname} is already edit this pdf if you want to edit now please contact with ${file.ownerId.fullname}`,
         editable: result.is_editable,
         // data: result,
       });
     }
-    return res.status(StatusCodes.CREATED).json({
-      status: true,
+    return res.status(200).json({
+      status: 200,
       type: "success",
       message: "File is Editable",
       editable: result.is_editable,
       // data: result,
     });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }

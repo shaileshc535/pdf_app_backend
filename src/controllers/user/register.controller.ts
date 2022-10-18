@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-useless-escape */
-// import { existsSync, mkdirSync, renameSync } from "fs";
 import jwt from "jsonwebtoken";
 import validator from "email-validator";
 import User from "../../db/models/user";
@@ -64,9 +62,7 @@ const register = async (req, res) => {
     if (!registerData.phone) {
       throw new Error("Please enter a Phone Number");
     }
-    // if (!registerData.fax) {
-    //     throw new Error("Please enter a Fax");
-    // }
+
     const user = new User({ ...req.body });
     let data = await user.save();
 
@@ -78,17 +74,13 @@ const register = async (req, res) => {
       "Congratulations your account is created. Please add your professional info and wait for the admin approval."
     );
 
-    const response = await User.findByIdAndUpdate(
-      data._id,
-      // { $set: { profile_photo: image_uri.Location } },
-      { new: true }
-    );
+    const response = await User.findByIdAndUpdate(data._id, { new: true });
 
     const token = jwt.sign({ _id: data._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     res.status(200).json({
-      status: true,
+      status: 200,
       type: "success",
       message: "User Registration Successfully",
       data: {
@@ -97,16 +89,15 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
-    // deleteFileByPath(req.file?.path);
     if (error.code == 11000) {
       res.status(400).json({
-        status: false,
+        status: 400,
         type: "error",
         message: "Email Already exist",
       });
     } else {
       res.status(400).json({
-        status: false,
+        status: 400,
         type: "error",
         message: error.message,
       });

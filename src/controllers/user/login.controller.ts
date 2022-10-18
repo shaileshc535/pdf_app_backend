@@ -11,17 +11,17 @@ const login = async (req, res) => {
       email: verifiedEmail,
     }).exec((err, user) => {
       if (err) {
-        res.status(500).send({
+        res.status(400).send({
           type: "error",
-          status: false,
+          status: 400,
           message: err,
         });
         return;
       }
       if (!user) {
-        return res.status(404).send({
+        return res.status(400).send({
           type: "error",
-          status: false,
+          status: 400,
           message: "User Not Found",
         });
       }
@@ -31,9 +31,9 @@ const login = async (req, res) => {
       console.log("passwordIsValid", passwordIsValid);
 
       if (!passwordIsValid) {
-        return res.status(404).send({
+        return res.status(400).send({
           type: "error",
-          status: false,
+          status: 400,
           message: "Invalid Password!",
         });
       }
@@ -42,9 +42,9 @@ const login = async (req, res) => {
         expiresIn: 86400, //24 hours
       });
 
-      res.status(StatusCodes.OK).json({
+      res.status(200).json({
         type: "success",
-        status: true,
+        status: 200,
         message: "User Successfully Logged-In",
         data: {
           ...user.toObject(),
@@ -53,9 +53,9 @@ const login = async (req, res) => {
       });
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(404).json({
       type: "error",
-      status: false,
+      status: 404,
       message: error.message,
     });
   }
