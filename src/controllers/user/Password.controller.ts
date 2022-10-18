@@ -21,7 +21,11 @@ const forgotPassword = async (
     const { error } = schema.validate(req.body);
 
     if (error) {
-      return res.status(404).send(error.details[0].message);
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: error.details[0].message,
+      });
     }
 
     const user = await User.findOne({ email: email });
@@ -97,7 +101,12 @@ const resetPassword = async (
     });
 
     const { error } = schema.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error)
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: error.details[0].message,
+      });
 
     const user = await User.findById(req.params.userId);
     if (!user)
@@ -169,7 +178,11 @@ const changePassword = async (req, res: Response, next: NextFunction) => {
 
     const { error } = schema.validate(req.body);
     if (error) {
-      return res.status(400).send(error.details[0].message);
+      return res.status(400).send({
+        type: "error",
+        status: 400,
+        message: error.details[0].message,
+      });
     }
 
     const passwordIsValid = bcrypt.compareSync(currentPassword, user.password);
@@ -223,9 +236,6 @@ const changeTempPassword = async (req, res) => {
     const { email, tmp_password, new_password, confirm_password } = req.body;
 
     const schema = Joi.object({ email: Joi.string().email().required() });
-    // const {error} = schema.validate(req.body);
-
-    // if(error) return res.status(404).send(error.details[0].message);
 
     const user = await User.findOne({ email: email });
 

@@ -1,4 +1,3 @@
-import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import User from "../../db/models/user";
 import bcrypt from "bcrypt";

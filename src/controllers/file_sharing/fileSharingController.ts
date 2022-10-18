@@ -1,7 +1,6 @@
 import PdfSchema from "../../db/models/pdf.model";
 import SharedFileSchema from "../../db/models/sharedFile.model";
 import { Response } from "express";
-import StatusCodes from "http-status-codes";
 
 export interface ISHAREDFILE {
   senderId?: string;
