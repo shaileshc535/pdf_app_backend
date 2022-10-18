@@ -33,7 +33,7 @@ const ShareFile = async (req, res: Response) => {
         if (file.ownerId._id !== user._id) {
           return res.status(400).json({
             type: "error",
-            status: false,
+            status: 400,
             message: `you don’t have permission to share this file. Please contact ${file.ownerId.fullname} for permission`,
           });
         }
