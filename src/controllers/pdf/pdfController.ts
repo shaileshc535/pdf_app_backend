@@ -217,6 +217,18 @@ const ListPdfFiles = async (req, res: Response) => {
     const result_count = await PdfSchema.find(cond).count();
     const totalPages = Math.ceil(result_count / limit);
 
+    const data = [];
+
+    for (let i = 0; i < result.length; i++) {
+      const base_url = process.env.BASE_URL;
+
+      const file_url = base_url + result[i].filename;
+
+      data.push({ file_url: file_url, result: result[i] });
+    }
+
+    console.log("data", data);
+
     return res.status(200).json({
       status: 200,
       type: "success",
@@ -225,7 +237,7 @@ const ListPdfFiles = async (req, res: Response) => {
       limit: limit,
       totalPages: totalPages,
       total: result_count,
-      data: result,
+      data: data,
     });
   } catch (error) {
     return res.status(404).json({
@@ -247,11 +259,17 @@ const GetPdfFileById = async (req, res: Response) => {
       isdeleted: false,
     }).populate("ownerId");
 
+    const base_url = process.env.BASE_URL;
+
+    const file_url = base_url + result.filename;
+
+    console.log("file_url", file_url);
     return res.status(200).json({
       status: 200,
       type: "success",
       message: "File Fetched Successfully",
       data: result,
+      file_url: file_url,
     });
   } catch (error) {
     return res.status(404).json({
