@@ -209,7 +209,6 @@ const ListPdfFiles = async (req, res: Response) => {
     limit = parseInt(limit);
 
     const result = await PdfSchema.find(cond)
-      .populate("ownerId")
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit);
@@ -224,11 +223,37 @@ const ListPdfFiles = async (req, res: Response) => {
 
       const file_url = base_url + "/public/pdf/" + result[i].filename;
 
-      // result[i].push({ file_url: file_url });
+      const ownerId = result[i].ownerId;
+      const docname = result[i].docname;
+      const filetype = result[i].filetype;
+      const filesize = result[i].filesize;
+      const is_editable = result[i].is_editable;
+      const isupdated = result[i].isupdated;
+      const isdeleted = result[i].isdeleted;
+      const createdAt = result[i].createdAt;
+      const updatedAt = result[i].updatedAt;
+      const fileConsumers = result[i].fileConsumers;
+      const __v = result[i].__v;
 
-      data.push({ file_url: file_url, result: result[i] });
+      // result[i].append({ file_url: file_url });
+
+      data.push({
+        file_url: file_url,
+        ownerId,
+        docname,
+        filetype,
+        filesize,
+        is_editable,
+        isupdated,
+        isdeleted,
+        fileConsumers,
+        createdAt,
+        updatedAt,
+        __v,
+      });
     }
 
+    // console.log("result", result);
     console.log("data", data);
 
     return res.status(200).json({
@@ -259,7 +284,7 @@ const GetPdfFileById = async (req, res: Response) => {
       _id: fileId,
       ownerId: user._id,
       isdeleted: false,
-    }).populate("ownerId");
+    });
 
     const base_url = process.env.BASE_URL;
 
