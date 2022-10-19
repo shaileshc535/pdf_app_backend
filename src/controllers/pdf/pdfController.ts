@@ -13,6 +13,8 @@ export interface IPdf {
   isupdated: boolean;
   deleted_at?: Date;
   updated_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const AddNewPdf = async (req, res: Response) => {
@@ -209,6 +211,7 @@ const ListPdfFiles = async (req, res: Response) => {
     limit = parseInt(limit);
 
     const result = await PdfSchema.find(cond)
+      .populate("ownerId")
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit);
@@ -223,7 +226,7 @@ const ListPdfFiles = async (req, res: Response) => {
 
       const file_url = base_url + "/public/pdf/" + result[i].filename;
 
-      const ownerId = result[i].ownerId;
+      const owner = result[i].ownerId;
       const docname = result[i].docname;
       const filetype = result[i].filetype;
       const filesize = result[i].filesize;
@@ -235,11 +238,9 @@ const ListPdfFiles = async (req, res: Response) => {
       const fileConsumers = result[i].fileConsumers;
       const __v = result[i].__v;
 
-      // result[i].append({ file_url: file_url });
-
       data.push({
         file_url: file_url,
-        ownerId,
+        owner,
         docname,
         filetype,
         filesize,
@@ -252,9 +253,6 @@ const ListPdfFiles = async (req, res: Response) => {
         __v,
       });
     }
-
-    // console.log("result", result);
-    console.log("data", data);
 
     return res.status(200).json({
       status: 200,
