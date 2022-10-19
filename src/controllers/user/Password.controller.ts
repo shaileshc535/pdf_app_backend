@@ -290,9 +290,61 @@ const changeTempPassword = async (req, res) => {
   }
 };
 
+const ListAllUsers = async (req, res: Response) => {
+  try {
+    const user = JSON.parse(JSON.stringify(req.user));
+    let { page, limit, sort, cond } = req.body;
+
+    if (user) {
+      cond = { ...cond };
+    }
+
+    if (!page || page < 1) {
+      page = 1;
+    }
+    if (!limit) {
+      limit = 10;
+    }
+    if (!cond) {
+      cond = {};
+    }
+    if (!sort) {
+      sort = { createdAt: -1 };
+    }
+
+    limit = parseInt(limit);
+
+    const result = await User.find(cond)
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const result_count = await User.find(cond).count();
+    const totalPages = Math.ceil(result_count / limit);
+
+    return res.status(200).json({
+      status: 200,
+      type: "success",
+      message: "Users Fetch Successfully",
+      page: page,
+      limit: limit,
+      totalPages: totalPages,
+      total: result_count,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      type: "error",
+      status: 404,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   forgotPassword,
   resetPassword,
   changePassword,
   changeTempPassword,
+  ListAllUsers,
 };

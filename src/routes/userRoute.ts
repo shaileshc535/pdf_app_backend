@@ -12,5 +12,6 @@ router.post("/forgotPass", Passwordcontroller.forgotPassword);
 router.post("/password-reset/:userId/:token", Passwordcontroller.resetPassword);
 router.post("/forgot-reset-password", Passwordcontroller.changeTempPassword);
 router.post("/password-change", auth, Passwordcontroller.changePassword);
+router.post("/list-users", auth, Passwordcontroller.ListAllUsers);
 
 export default router;
