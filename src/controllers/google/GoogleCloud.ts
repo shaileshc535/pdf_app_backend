@@ -1,5 +1,5 @@
 import { Storage } from "@google-cloud/storage";
-import processFile from "./upload";
+import processFile from "../pdf/upload";
 import { format } from "util";
 
 // const projectId = "file-storing-app";

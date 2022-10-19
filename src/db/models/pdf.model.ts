@@ -2,10 +2,11 @@ import { Schema, model, PopulatedDoc } from "mongoose";
 import { IUser } from "./user";
 
 export interface IPdf {
-  ownerId?: PopulatedDoc<IUser>;
+  owner?: PopulatedDoc<IUser>;
   filename: string;
   filetype?: string;
   filesize?: string;
+  file_url?: string;
   docname?: string;
   isdeleted: boolean;
   is_editable: boolean;
@@ -17,8 +18,9 @@ export interface IPdf {
 
 const pdfSchema = new Schema<IPdf>(
   {
-    ownerId: { type: Schema.Types.ObjectId, ref: "user", required: true },
+    owner: { type: Schema.Types.ObjectId, ref: "user", required: true },
     filename: { type: String, required: true },
+    file_url: { type: String, required: true },
     docname: { type: String },
     filetype: { type: String },
     filesize: { type: String },
@@ -40,7 +42,7 @@ const pdfSchema = new Schema<IPdf>(
 
 pdfSchema.virtual("uploader", {
   ref: "user",
-  localField: "ownerId",
+  localField: "owner",
   foreignField: "_id",
   justOne: true,
 });

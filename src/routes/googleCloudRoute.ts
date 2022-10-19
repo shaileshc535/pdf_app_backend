@@ -1,5 +1,5 @@
 import express from "express";
-import controller from "../controllers/pdf/GoogleCloud";
+import controller from "../controllers/google/GoogleCloud";
 import Multer from "multer";
 // import auth from "../middlewares/auth.middleware";
 

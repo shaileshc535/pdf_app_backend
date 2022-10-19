@@ -25,15 +25,15 @@ const ShareFile = async (req, res: Response) => {
         const fileData = await PdfSchema.findOne({
           _id: requestedData.fileId,
           isdeleted: false,
-        }).populate("ownerId");
+        }).populate("owner");
 
         const file = JSON.parse(JSON.stringify(fileData));
 
-        if (file.ownerId._id !== user._id) {
+        if (file.owner._id !== user._id) {
           return res.status(400).json({
             type: "error",
             status: 400,
-            message: `you don’t have permission to share this file. Please contact ${file.ownerId.fullname} for permission`,
+            message: `you don’t have permission to share this file. Please contact ${file.owner.fullname} for permission`,
           });
         }
 

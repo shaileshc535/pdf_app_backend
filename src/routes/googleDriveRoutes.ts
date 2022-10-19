@@ -1,5 +1,5 @@
 import express from "express";
-import controller from "../controllers/pdf/GoogleDrive";
+import controller from "../controllers/google/GoogleDrive";
 import Multer from "multer";
 // import auth from "../middlewares/auth.middleware";
 

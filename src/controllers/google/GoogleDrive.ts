@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { GoogleDriveService } from "./googleDriveServices";
 import { Storage } from "@google-cloud/storage";
-import processFile from "./upload";
+import processFile from "../pdf/upload";
 import { format } from "util";
 
 const driveClientId = process.env.GOOGLE_DRIVE_CLIENT_ID || "";
