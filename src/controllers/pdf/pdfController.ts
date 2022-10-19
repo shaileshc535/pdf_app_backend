@@ -222,7 +222,7 @@ const ListPdfFiles = async (req, res: Response) => {
     for (let i = 0; i < result.length; i++) {
       const base_url = process.env.BASE_URL;
 
-      const file_url = base_url + "public/pdf" + result[i].filename;
+      const file_url = base_url + "/public/pdf/" + result[i].filename;
 
       // result[i].push({ file_url: file_url });
 
@@ -263,7 +263,7 @@ const GetPdfFileById = async (req, res: Response) => {
 
     const base_url = process.env.BASE_URL;
 
-    const file_url = base_url + "public/pdf" + result.filename;
+    const file_url = base_url + "/public/pdf/" + result.filename;
 
     result.push({ file_url: file_url });
 
