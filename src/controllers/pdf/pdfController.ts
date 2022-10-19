@@ -148,7 +148,6 @@ const DeletePdfFile = async (req, res: Response) => {
     const file = JSON.parse(JSON.stringify(fileData));
 
     if (file.owner._id !== user._id) {
-      console.log("false");
       return res.status(400).json({
         type: "error",
         status: 400,

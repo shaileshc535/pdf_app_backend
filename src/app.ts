@@ -45,38 +45,15 @@ const io = new socketio.Server(server, {
 });
 
 io.on("connection", (socket) => {
-  // console.log("Connected: " + socket.userId);
-
-  socket.on("disconnect", () => {
-    console.log("chat is disconnected");
-  });
+  socket.on("disconnect", () => {});
 
   socket.on("joinRoom", ({ appointmentId }) => {
     socket.join(appointmentId);
-    // console.log("A user joined chatroom: " + appointmentId);
   });
 
   socket.on("leaveRoom", ({ appointmentId }) => {
     socket.leave(appointmentId);
-    // console.log("A user left chatroom: " + appointmentId);
   });
-
-  // socket.on("sendMessage", async ({ appointmentId, userId, message }) => {
-  //   if (message.trim().length > 0) {
-  //     const user = await MessageModel.find({ appointmentId: appointmentId });
-
-  //     const newMessage = new MessageModel({
-  //       appointmentId: appointmentId,
-  //       userId: userId,
-  //       message: message,
-  //     });
-  //     io.to(appointmentId).emit("newMessage", {
-  //       message,
-  //       user,
-  //     });
-  //     await newMessage.save();
-  //   }
-  // });
 
   socket.on("sendMessage", async ({ appointmentId, userId, message }) => {
     if (message.trim().length > 0) {

@@ -27,7 +27,6 @@ export default async function auth(req, res, next) {
     req.user = user;
     next();
   } catch (error) {
-    // console.log(error.message,'---jwt error');
     if (error.message == "invalid signature") {
       return res.status(StatusCodes.UNAUTHORIZED).json({
         status: false,

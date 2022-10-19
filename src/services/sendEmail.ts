@@ -32,7 +32,6 @@ const sendEmail = async (email, subject, text = "", html = "") => {
         console.log(err);
         return;
       }
-      // console.log("sent" + info.response)
     });
 
     console.log("Eamil sent Successful");

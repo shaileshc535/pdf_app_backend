@@ -25,7 +25,6 @@ export const validate = (schema: Schema, key) => {
         const { details } = error;
         const message = details.map((i) => i.message).join(",");
 
-        console.log("error", message);
         res.status(StatusCodes.BAD_REQUEST).json({
           type: "error",
           status: false,
@@ -33,7 +32,6 @@ export const validate = (schema: Schema, key) => {
         });
       }
     } catch (error) {
-      console.log("error", error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         type: "error",
         status: false,

@@ -9,8 +9,6 @@ const s3 = new AWS.S3({
 });
 
 const uploadFile = async (request) => {
-  console.log("1");
-
   try {
     const fileName = request.file.fieldname;
 
