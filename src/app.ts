@@ -1,13 +1,10 @@
+import path from "path";
+import getConnection from "./db/connection";
+import Router from "./routes/index";
 import express from "express";
 import cors from "cors";
-import path from "path";
 import methodOverride from "method-override";
 import { config } from "dotenv";
-import getConnection from "./db/connection";
-import MessageModel from "./db/models/message.model";
-import * as http from "http";
-import * as socketio from "socket.io";
-import Router from "./routes/index";
 
 config();
 
@@ -33,58 +30,6 @@ app.get("/", (req, res) => {
 });
 const PORT = process.env.PORT || 3000;
 
-const server = http.createServer(app);
-
-const io = new socketio.Server(server, {
-  allowEIO3: true,
-  cors: {
-    origin: true,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-
-io.on("connection", (socket) => {
-  socket.on("disconnect", () => {});
-
-  socket.on("joinRoom", ({ appointmentId }) => {
-    socket.join(appointmentId);
-  });
-
-  socket.on("leaveRoom", ({ appointmentId }) => {
-    socket.leave(appointmentId);
-  });
-
-  socket.on("sendMessage", async ({ appointmentId, userId, message }) => {
-    if (message.trim().length > 0) {
-      const user = await MessageModel.find({ appointmentId: appointmentId });
-
-      const newMessage = new MessageModel({
-        appointmentId: appointmentId,
-        userId: userId,
-        message: message,
-      });
-      io.to(appointmentId).emit("newMessage", {
-        message,
-        user,
-      });
-      await newMessage.save();
-
-      socket.emit("message", {
-        message,
-        user,
-      });
-    }
-  });
-
-  socket.on("getChatMessage", async ({ appointmentId, userId }) => {
-    const chatMessage = await MessageModel.find({
-      appointmentId: appointmentId,
-    });
-    io.to(appointmentId).emit("chatMessage", {});
-  });
-});
-
-server.listen(PORT, () => {
-  return console.log(`Express is listening at http://localhost:${PORT}`);
+app.listen(PORT, () => {
+  return console.log(`Server is listening at http://localhost:${PORT}`);
 });
