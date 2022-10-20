@@ -51,3 +51,5 @@ app.listen(PORT, () => {
 });
 
 // "build": "tsc && copy -R src dist/src",
+    // "build": "rimraf ./dist && tsc",
+// 
