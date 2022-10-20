@@ -1,6 +1,8 @@
 import PdfSchema from "../../db/models/pdf.model";
+import SharedFileSchema from "../../db/models/sharedFile.model";
 import { Response } from "express";
 import StatusCodes from "http-status-codes";
+// import fs from "fs";
 
 export interface IPdf {
   owner: string;
@@ -71,13 +73,17 @@ const UpdatePdfFile = async (req, res: Response) => {
 
     const { fileId } = req.body;
 
+    const base_url = process.env.BASE_URL;
+
+    const file_url = base_url + "/public/pdf/" + req.file.filename;
+
     const fileData = await PdfSchema.findOne({
       _id: fileId,
       owner: user._id,
       isdeleted: false,
     }).populate("owner");
 
-    const file = JSON.parse(JSON.stringify(fileData));
+    // const file = JSON.parse(JSON.stringify(fileData));
 
     if (!fileData) {
       return res.status(400).json({
@@ -87,21 +93,22 @@ const UpdatePdfFile = async (req, res: Response) => {
       });
     }
 
-    if (fileData.is_editable !== true) {
-      return res.status(400).json({
-        type: "error",
-        status: 400,
-        message: `${file.owner.fullname} is already edit this pdf if you want to edit now please contact with ${file.owner.fullname}`,
-        editable: fileData.is_editable,
-      });
-    }
+    // if (fileData.is_editable !== true) {
+    //   return res.status(400).json({
+    //     type: "error",
+    //     status: 400,
+    //     message: `${file.owner.fullname} is already edit this pdf if you want to edit now please contact with ${file.owner.fullname}`,
+    //     editable: fileData.is_editable,
+    //   });
+    // }
 
     const requestData = {
+      file_url: file_url,
       docname: req.body.docname,
-      filename: req.file.filename,
-      filetype: req.file.mimetype,
+      // filename: req.file.filename,
+      // filetype: req.file.mimetype,
       filesize: req.file.size,
-      is_editable: false,
+      // is_editable: false,
       isupdated: true,
       updated_at: Date.now(),
     };
@@ -171,6 +178,13 @@ const DeletePdfFile = async (req, res: Response) => {
     await PdfSchema.findByIdAndUpdate(
       {
         _id: id,
+      },
+      requestData
+    );
+
+    await SharedFileSchema.findOneAndUpdate(
+      {
+        fileId: id,
       },
       requestData
     );

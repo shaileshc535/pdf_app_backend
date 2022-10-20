@@ -17,21 +17,14 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
     const datetimestamp = Date.now();
-    cb(
-      null,
-      file.fieldname +
-        "-" +
-        datetimestamp +
-        "." +
-        file.originalname.split(".")[file.originalname.split(".").length - 1]
-    );
+    cb(null, file.fieldname + "-" + datetimestamp + ".pdf");
   },
 });
 
 const upload = multer({
   storage,
   fileFilter: function (req, file, callback) {
-    const ext = path.extname(file.originalname);
+    // const ext = path.extname(file.originalname);
     // if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") {
     //   return callback(new Error("Only images are allowed"));
     // }

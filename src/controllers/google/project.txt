@@ -1,6 +1,0 @@
-Project Number  =   617005471972
-Project ID  =   files-app-365911
-Project Name    =   Files-App
-Authorization code    =   4/0ARtbsJq8Epa5OLAhZdDl6flaPmh4biOe4kvkKrFzqux2jc09yT9yeKu4umCkph_l8j7ttw
-Refresh token   =   1//04A_X7VYU-REQCgYIARAAGAQSNwF-L9IrvrflKGEK-IuvRvEaaSgzLohtoGNunerF-7GEYHx6Tvtc3VKVIeV7mkV5bFvrU4TDs_0
-Access token    =   ya29.a0Aa4xrXNDmCrag41Rbjff0saOaKO_llG4U4aV8lh1-DeEnjLGQiza9r7UTlSqcyzv4NAW8hbhYlI_sBI7z3bJWy2cvvjvkasL6_OgdvdS7jnV0CVMkJXJ-QaK-oPUi0Bn5knKdxeBv2YUNaRKs42qbaPTldIGaCgYKATASARESFQEjDvL9-tgkGNK3blA5uBPtk9Jgjg0163
